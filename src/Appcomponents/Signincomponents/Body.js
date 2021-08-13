@@ -34,7 +34,6 @@ const Body = (props) => {
             app_context.setflash_msg(flash_msg)
         }
         else{
-            console.log(result)
             const flash_msg = "Sorry Dear, we encountered a system mantainance problem"
             app_context.setflash_msg(flash_msg) 
         }
