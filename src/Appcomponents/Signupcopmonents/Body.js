@@ -16,7 +16,8 @@ const Body = (props) => {
     const { push } = useHistory()
 
     const post_user_data = async (form) => {
-        const response  = await fetch("/signup",{method : "POST", body : form })
+        const base_url = "https://vendor-videos-api.herokuapp.com"
+        const response  = await fetch(base_url + "/signup",{method : "POST", body : form })
         const data = await response.json()
         return data
     }
