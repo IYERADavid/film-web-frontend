@@ -1,9 +1,9 @@
 #This are my redirects configuration for netlify to work well
 
-/Dashboard  /home
-/Register  /signin
-/Login  /signup
+/   /home
+/Register   /signin
+/Login   /signup
 
 # Here we ridirect use to home when he/she goes to the route we do not have
 
-/*  /home
+/*    /home
