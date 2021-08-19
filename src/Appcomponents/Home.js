@@ -7,6 +7,7 @@ const Home = () => {
     const [LoadingDataError, setLoadingDataError] = useState(false)
     const [UserInfo, setUserInfo] = useState(null)
     const { push } = useHistory()
+    
     useEffect(()=>{
         const result = get_user_data()
         result.then((datas) =>{
@@ -50,7 +51,7 @@ const Home = () => {
             <h4>user first name : {UserInfo.first_name}</h4>
             <h4>user last name : {UserInfo.last_name}</h4>
             <h4>user email : {UserInfo.email}</h4>
-            <button onClick={logout_current_user} className="signout mt-3 btn btn-success">LOgout</button>
+            <button onClick={logout_current_user} className="signout mt-3 btn btn-success">Logout</button>
         </div>}
         </>
     )

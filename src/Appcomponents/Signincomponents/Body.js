@@ -1,4 +1,4 @@
-import { useRef, useContext } from 'react'
+import { useRef, useContext, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Appcontext } from '../../App'
 import Input from './Bodycomponents/Input'
@@ -10,11 +10,13 @@ const Body = (props) => {
     const email_ref = useRef(null) 
     const password_ref = useRef(null)
     const remember_me_ref = useRef(null)
+    const [LoadingData, setLoadingData] = useState(false)
+    const [LoadingDataError, setLoadingDataError] = useState(false)
     const { push } = useHistory()
     
     const post_user_data = async (form) => {
-        const base_url = "https://vendor-videos-api.herokuapp.com"
-        const response  = await fetch(base_url + "/signin",{method : "POST", body : form })
+        setLoadingData(true)
+        const response = await app_context.UnAuthfetch("/signin", {method : "POST", body : form })
         const data = await response.json()
         return data
     }
@@ -32,10 +34,12 @@ const Body = (props) => {
         else if(result.status === "invalid_credentials"){
             const flash_msg = "The email or password you entered is invalid"
             app_context.setflash_msg(flash_msg)
+            setLoadingData(false)
         }
         else{
             const flash_msg = "Sorry Dear, we encountered a system mantainance problem"
-            app_context.setflash_msg(flash_msg) 
+            app_context.setflash_msg(flash_msg)
+            setLoadingData(false)
         }
     }
 
@@ -68,8 +72,7 @@ const Body = (props) => {
                 (result) => handle_valid_response(result)
                 ).catch(
                     (problem) => {
-                        const flash_msg = "Sorry Dear, we encountered a system mantainance problem"
-                        app_context.setflash_msg(flash_msg)
+                        setLoadingDataError(true)
                     }
                 )
         }
@@ -84,6 +87,18 @@ const Body = (props) => {
 
     return (
         <>
+        { LoadingData ?
+        <div id="load">
+            {LoadingDataError ?
+            <div className="text-center">
+                <h4 className="mb-3">Something went wrong</h4>
+                <a href="/signin" className="btn btn-dark">TRY AGAIN</a>
+            </div> :
+            <div id="load_circle" className="spinner-border text-secondary" role="status">
+                <span className="sr-only"></span>
+            </div>
+            }
+        </div> :
         <section className="form vertical-center">
             <div className="container">
                 <div className="row login-main no-gutters">
@@ -123,6 +138,7 @@ const Body = (props) => {
                 </div>
             </div>
         </section>
+        }
         </>
     )
 }

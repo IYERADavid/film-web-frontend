@@ -4,6 +4,8 @@ import PrivateRoute from './Appcomponents/PrivateRoute'
 import Signup from './Appcomponents/Signup'
 import Signin from './Appcomponents/Signin'
 import Home from './Appcomponents/Home'
+import ResetPassword from './Appcomponents/ResetPassword'
+import NewPassword from './Appcomponents/NewPassword'
 
 export const Appcontext = createContext(null) 
 
@@ -20,10 +22,16 @@ const App = () => {
     setLoadingData(false)
   }, [])
   
+  const base_url = "https://vendor-videos-api.herokuapp.com"
+  const UnAuthfetch = (url, options={}) => {
+    return fetch(base_url + url, options)
+  }
+  
   return (
     <>
     { !LoadingData &&
-    <Appcontext.Provider value={{current_user : current_user, setcurrent_user : setcurrent_user, setflash_msg : setflash_msg }}>
+    <Appcontext.Provider value={{current_user : current_user, setcurrent_user : setcurrent_user, setflash_msg : setflash_msg,
+    UnAuthfetch: UnAuthfetch }}>
     <div className="main_container">
       <Router>
         {flash_msg  &&
@@ -37,6 +45,8 @@ const App = () => {
         <PrivateRoute exact path="/home" component={Home} />
         <Route exact path="/signup" component={Signup} />
         <Route exact path="/signin" component={Signin} />
+        <Route exact path="/reset_password" component={ResetPassword} />
+        <Route exact path="/new_password/:token" component={NewPassword} />
       </Router>
     </div>
     </Appcontext.Provider>}

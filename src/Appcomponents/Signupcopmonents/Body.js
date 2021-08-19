@@ -1,4 +1,4 @@
-import { useRef, useContext } from 'react'
+import { useRef, useContext, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Appcontext } from '../../App'
 import Input from './Bodycomponents/Input'
@@ -13,11 +13,13 @@ const Body = (props) => {
     const email_ref = useRef(null) 
     const password_ref = useRef(null)
     const confirm_password_ref = useRef(null)
+    const [LoadingData, setLoadingData] = useState(false)
+    const [LoadingDataError, setLoadingDataError] = useState(false)
     const { push } = useHistory()
 
     const post_user_data = async (form) => {
-        const base_url = "https://vendor-videos-api.herokuapp.com"
-        const response  = await fetch(base_url + "/signup",{method : "POST", body : form })
+        setLoadingData(true)
+        const response = await app_context.UnAuthfetch("/signup", {method : "POST", body : form })
         const data = await response.json()
         return data
     }
@@ -34,10 +36,12 @@ const Body = (props) => {
         else if(result.status === "email_exist_error"){
             const flash_msg = "Incorrect email, Dear the email you entered already exist here try another"
             app_context.setflash_msg(flash_msg)
+            setLoadingData(false)
         }
         else{
             const flash_msg = "Sorry Dear, we encountered a system mantainance problem"
-            app_context.setflash_msg(flash_msg) 
+            app_context.setflash_msg(flash_msg)
+            setLoadingData(false)
         }
     }
 
@@ -70,8 +74,7 @@ const Body = (props) => {
                 (result) => handle_valid_response(result)
                 ).catch(
                 () => {
-                    const flash_msg = "Sorry Dear, we encountered a system mantainance problem"
-                    app_context.setflash_msg(flash_msg)
+                    setLoadingDataError(true)
                 }
                 )
         }
@@ -86,6 +89,18 @@ const Body = (props) => {
 
     return (
         <>
+        { LoadingData ?
+        <div id="load">
+            {LoadingDataError ?
+            <div className="text-center">
+                <h4 className="mb-3">Something went wrong</h4>
+                <a href="/signup" className="btn btn-dark">TRY AGAIN</a>
+            </div> :
+            <div id="load_circle" className="spinner-border text-secondary" role="status">
+                <span className="sr-only"></span>
+            </div>
+            }
+        </div> :
         <div className="container">
             <div className="row first-row no-gutters">
                 <div className="col-md-4 col-lg-6">
@@ -105,37 +120,37 @@ const Body = (props) => {
                         <div className="row">
                             <label className="label col-md-4 control-label">First name</label>
                             <div className="col-md-6">
-                                <Input ref={firstname_ref} type="text" name="first_name" class_name="form-control" placeholder="First name" />
+                                <Input ref={firstname_ref} type="text" name="first_name" class_name="register-form form-control" placeholder="First name" />
                             </div>
                         </div>
                         <div className="row">
                             <label className="label col-md-4 control-label">Last name</label>
                             <div className="col-md-6">
-                                <Input ref={lastname_ref} type="text" name="last_name" class_name="form-control" placeholder="Last name" />
+                                <Input ref={lastname_ref} type="text" name="last_name" class_name="register-form form-control" placeholder="Last name" />
                             </div>
                         </div>
                         <div className="row">
                             <label className="label col-md-4 control-label">Middle name</label>
                             <div className="col-md-6">
-                                <Input ref={middlename_ref} type="text" name="middle_name" class_name="form-control" placeholder="Middle name" />
+                                <Input ref={middlename_ref} type="text" name="middle_name" class_name="register-form form-control" placeholder="Middle name" />
                             </div>
                         </div>
                         <div className="row">
                             <label className="label col-md-4 control-label">E-mail</label>
                             <div className="col-md-6">
-                                <Input ref={email_ref} type="email" name="email" class_name="form-control" placeholder="Email" />
+                                <Input ref={email_ref} type="email" name="email" class_name="register-form form-control" placeholder="Email" />
                             </div>
                         </div>
                         <div className="row">
                             <label className="label col-md-4 control-label">Password</label>
                             <div className="col-md-6">
-                                <Input ref={password_ref} type="password" name="password" class_name="form-control" placeholder="Password" />
+                                <Input ref={password_ref} type="password" name="password" class_name="register-form form-control" placeholder="Password" />
                             </div>
                         </div>
                         <div className="row">
                             <label className="label col-md-4 control-label">Confirm-Password</label>
                             <div className="col-md-6">
-                                <Input ref={confirm_password_ref} type="password" name="confirm_password" class_name="form-control" placeholder="Re enter password" />
+                                <Input ref={confirm_password_ref} type="password" name="confirm_password" class_name="register-form form-control" placeholder="Re enter password" />
                             </div>
                         </div>
                         <br/>
@@ -144,6 +159,7 @@ const Body = (props) => {
                 </div>
             </div>
         </div>
+        }
         </>
     )
 }
