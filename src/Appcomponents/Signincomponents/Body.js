@@ -130,8 +130,8 @@ const Body = (props) => {
                         </div>
                         <button type="submit" className="btn btn-success">Signin</button>
                         <div className="row">
-                            <a className="link1 col-md-12" href="{{url_for('change_password')}}">Forget password</a>
-                            <p className="col-md-12">Need an account? <a href="{{url_for('signup')}}">signup here</a></p>
+                            <a className="link1 col-md-12" href="/reset_password">Forget password</a>
+                            <p className="col-md-12">Need an account? <a href="/signup">signup here</a></p>
                         </div>
                     </form>
                 </div>
