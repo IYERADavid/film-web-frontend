@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect } from 'react'
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import PrivateRoute from './Appcomponents/PrivateRoute'
 import Signup from './Appcomponents/Signup'
 import Signin from './Appcomponents/Signin'
@@ -42,11 +42,16 @@ const App = () => {
           </button>
         </div>
         }
-        <PrivateRoute exact path="/home" component={Home} />
-        <Route exact path="/signup" component={Signup} />
-        <Route exact path="/signin" component={Signin} />
-        <Route exact path="/reset_password" component={ResetPassword} />
-        <Route exact path="/new_password/:token" component={NewPassword} />
+        <Switch>
+          <PrivateRoute exact path="/home" component={Home} />
+          <Route exact path="/signup" component={Signup} />
+          <Route exact path="/signin" component={Signin} />
+          <Route exact path="/reset_password" component={ResetPassword} />
+          <Route exact path="/new_password/:token" component={NewPassword} />
+          <Route>
+            <h1>The url you requested not found </h1>
+          </Route>
+        </Switch>
       </Router>
     </div>
     </Appcontext.Provider>}
